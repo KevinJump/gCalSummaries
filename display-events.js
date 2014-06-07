@@ -1,7 +1,6 @@
 /* display-events.js */
 
-	var GC_APIKEY = 'YOUR_API_KEY_HERE';
-    
+
 	/*
 	   loads event listings from a google calendar. 
 	   
@@ -29,7 +28,8 @@
 		props.count = props.count || 5 ;
 		props.callback = props.callback || defaultEventDisplay ; 
 		
-		var timeMin = '2014-06-07T10:30:42.4564062Z'; //it's now so we don't get old events..
+		var timeMin = new Date().toISOString(); //it's now so we don't get old events..
+		console.log(timeMin); 
 	
 		var url = 'https://www.googleapis.com/calendar/v3/calendars/' + props.id + '/events?key=' + GC_APIKEY + '&timeMin=' + timeMin + '&singleEvents=true&orderBy=startTime';
 		
@@ -45,9 +45,6 @@
 		loadEventsCalendar(url, props.callback); 
 			
 	}
-	
-	
-	
 
 	function loadEventsCalendar(url, displayCallback)
 	{
@@ -62,17 +59,15 @@
 				
 					var event = new Object();
 					event.date = new Date(ev.start.dateTime);
-					event.day = '';
 					event.start = '';
 					event.formattedDate = '';
 					event.summary = ev.summary;
 					event.url = ev.htmlLink;
-					event.discription = ev.discription;
+					event.description = ev.description;
 					
 					if ( typeof event.date != 'undefined')
 					{
-						event.day = $.format.date(ev.start.dateTime, "ddd");
-						event.formattedDate = $.format.date(ev.start.dateTime, "dd/MM/yyyy");
+						event.formattedDate = $.format.date(ev.start.dateTime, "ddd dd MMMM yyyy");
 					}
 					events.push(event);
 				});
@@ -84,15 +79,25 @@
 	/* default display - if you don't define a callback - you get this */
 	function defaultEventDisplay(events)
 	{
-		var eventHtml = "" ; 
+	
+		var eventList = $('<div class="event-list"/>') ;
+		
 		
 		$.each(events, function(i, ev)
 		{
-			eventHtml = eventHtml + '<li class="gc-event">' + '<a href="' + ev.htmlLink + '">' + ev.formattedDate + ' ' + ev.summary + '</a>' + '</li>'
+			var eventHtml = $([
+				'<div itemscope itemtype="http://schema.org/Event" class="event-item">',
+				'  <a itemprop="url" href="' + ev.url + '">',
+				'    <div itemprop="name" class="event-title">' + ev.summary + '</div>',
+				'  </a>',
+				'	 <span itemprop="startDate" content="' + ev.date + '" class="event-date">'+ ev.formattedDate + '</span>',
+				'	 <div itemprop="description">' + ev.description + '</div>',
+				'</div>'
+				].join("")).appendTo(eventList);
+				
+				
+			// eventHtml = eventHtml + '<li class="gc-event">' + '<a href="' + ev.url + '">' + ev.formattedDate + ev.start + ': ' + ev.summary + '</a>' + '</li>'
 		});
 		
-		$('<ul/>', {
-			   'class': 'event-listing',
-				 html: eventHtml
-			   }).appendTo('#gc_events');
+		eventList.appendTo('#gc_events');
 	}
