@@ -62,7 +62,7 @@
 					event.start = '';
 					event.formattedDate = '';
 					event.summary = ev.summary;
-					event.url = ev.htmlLink;
+					event.htmlLink = ev.htmlLink;
 					event.description = ev.description;
 					
 					if ( typeof event.date != 'undefined')
@@ -87,7 +87,7 @@
 		{
 			var eventHtml = $([
 				'<div itemscope itemtype="http://schema.org/Event" class="event-item">',
-				'  <a itemprop="url" href="' + ev.url + '">',
+				'  <a itemprop="url" href="' + ev.htmlLink + '">',
 				'    <div itemprop="name" class="event-title">' + ev.summary + '</div>',
 				'  </a>',
 				'	 <span itemprop="startDate" content="' + ev.date + '" class="event-date">'+ ev.formattedDate + '</span>',
