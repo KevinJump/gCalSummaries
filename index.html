@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Calendar Summaries</title>
+	
+</head>
+<body>
+	<h1>Calendar Summaries</h1>
+	<p>
+		this page takes information from a Google Calendar, and displays summaries on the page
+	</p>
+	
+	<h2>Events..</h2>
+	<div id="gc_events">
+		
+	</div>
+
+	
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="js/jquery-dateFormat.js"></script>
+	<script src="display-events.js"></script>
+	
+	<script>
+	
+		$(document).ready(function() {	
+
+			/* load the calendar */
+			loadGoogleEvents( { 
+				id: 'qacmf0ot34tv9ffp19tfj6d2b4@group.calendar.google.com', 
+				search: 'liverpool',
+				count: 10, 
+				callback: defaultEventDisplay } ); 			
+
+			/* load the calendar from the full url */
+			/*
+			var url = "https://www.googleapis.com/calendar/v3/calendars/qacmf0ot34tv9ffp19tfj6d2b4@group.calendar.google.com/events?key=YOUR_API_KEY_HERE&timeMin=2014-06-07T10:30:42.4564062Z&singleEvents=true&orderBy=startTime&q=liverpool&maxResults=10";
+			
+			// load and display using the default list view...
+			loadEventsCalendar(url, defaultEventDisplay) ; 
+			*/
+		
+		});
+
+		
+	</script>
+</body>
+</html>
